@@ -1,7 +1,7 @@
 ---
 name: pain-point-research
 description: This skill should be used when the user asks to "research pain points", "run pain point research", "find what my audience complains about", "voice of customer research", "analyze online conversations for a persona", "mine Reddit and reviews for pain points", or starts research for a new persona, business or product. Runs the full intake-then-research workflow every time, with no saved state between runs.
-version: 0.1.0
+version: 0.2.0
 argument-hint: "[optional: audience | category]"
 ---
 
@@ -56,11 +56,24 @@ Spawn the `source-researcher` agent once per source group, all in a single messa
 
 Each agent writes verbatim quotes with working source URLs. Quotes without a URL are discarded.
 
+## Step 5b: Verify and review fit (mandatory, before synthesis)
+
+After all collection agents finish, spawn both in one message:
+
+- `quote-verifier` with the run folder. It runs `scripts/verify_quotes.py`, rescues or flags unverified quotes, and spot-checks sources.
+- `audience-fit-reviewer` with the run folder, the audience, the category with its regimes and jurisdictions, the competitor list, and the buying trigger. It tags speaker roles and measures coverage.
+
+Then act on the results:
+
+- Drop every finding listed in `raw/verification-report.json` under `drop`. In the workbook's `verification` column, write `verified` for findings listed under `confirmed` in that report and `excerpt-checked` for the rest. Take each quote's `speaker_role` from `finding_roles` in `raw/audience-fit.json`.
+- If the audience-fit verdict is `partial` or `poor`, show the user the verdict, the shares, and the re-run suggestions before synthesis. Ask whether to re-run the suggested groups with refined queries, continue as is, or stop. Never silently continue on a `poor` verdict.
+- Put the verdict, role shares, uncovered regimes and uncovered competitors in the report's opening section and in the `Audience Fit` sheet.
+
 ## Step 6: Synthesis
 
 Read all `raw/*.json` files and the competitive intelligence. Produce the nine deliverables defined in `references/deliverables.md`, in the schema in `references/workbook-schema.md`. Rules:
 
-- Use only quotes present in the raw files. Never invent, paraphrase into quotation marks, or repair a quote.
+- Use only quotes present in the raw files and not dropped by the verifier. Never invent, paraphrase into quotation marks, or repair a quote.
 - Frequency is a count of distinct sources mentioning the pain, not a guess. Intensity is a 1-5 score from the emotion tagging in the raw files, with the rubric in `references/deliverables.md`.
 - Target 15-20 quotes per major category. When fewer exist, report the real count and say so. Do not pad.
 - Opportunity score (1-10) must be justified by the competitive intelligence (what the user's product can credibly solve).
@@ -79,6 +92,7 @@ Read all `raw/*.json` files and the competitive intelligence. Produce the nine d
 - Never message, connect with, or comment on anyone on LinkedIn or Reddit.
 - Keep personal identifiers out of the deliverables. Use platform handles only as they appear in the public source link, and do not compile profiles of individuals.
 - Quote length: copy the relevant sentence or two, not whole posts.
+- Count frequency across target and adjacent speakers first; report vendor, consultant and learner sources separately, never as practitioner evidence.
 
 ## Additional Resources
 
@@ -87,4 +101,5 @@ Read all `raw/*.json` files and the competitive intelligence. Produce the nine d
 - **`references/workbook-schema.md`** - `synthesis.json` schema and sheet layout
 - **`references/connectors.md`** - Optional LinkedIn and Reddit access and fallbacks
 - **`references/original-prompt.md`** - The source research prompt, verbatim
+- **`scripts/verify_quotes.py`** - Mechanical quote check used by `quote-verifier`
 - **`scripts/build_workbook.py`** - Builds the xlsx from `synthesis.json`

@@ -10,13 +10,14 @@ import sys
 from pathlib import Path
 
 SHEETS = [
+    ("Audience Fit", "audience_fit", ["metric", "value", "note"]),
     ("Top 10", "top10", ["rank", "pain_point", "category", "frequency", "intensity", "summary"]),
     ("Categories", "categories", ["category", "frequency", "frequency_share", "intensity",
                                    "business_impact", "impact_reason", "opportunity_score"]),
     ("Category Detail", "category_detail", ["category", "behavioral_patterns", "emotional_triggers",
                                              "competitor_mentions", "opportunity_score", "opportunity_rationale"]),
     ("Quotes", "quotes", ["id", "category", "quote", "url", "platform", "date", "competitor",
-                          "emotion", "intensity"]),
+                          "emotion", "intensity", "speaker_role", "verification"]),
     ("Hidden Insights", "hidden_insights", ["insight", "evidence", "quote_ids"]),
     ("Competitor Gaps", "competitor_gaps", ["competitor", "pain_category", "how_they_fail",
                                              "evidence_quote_ids"]),

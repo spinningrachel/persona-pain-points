@@ -41,7 +41,7 @@ FM_RC=0; python3 "$TARGET/scripts/check-frontmatter.py" "$TARGET" >/dev/null 2>&
 if [ "$FM_RC" -eq 0 ]; then report 4 1 ""; else report 4 0 "frontmatter gate failed (rc=$FM_RC); run scripts/check-frontmatter.py"; fi
 
 # 5. Required files exist and are non-empty
-for f in README.md CLAUDE.md CONNECTORS.md LICENSE agents/source-researcher.md agents/qa-plugin.md \
+for f in README.md CLAUDE.md CONNECTORS.md LICENSE agents/source-researcher.md agents/qa-plugin.md agents/quote-verifier.md agents/audience-fit-reviewer.md skills/pain-point-research/scripts/verify_quotes.py \
   skills/pain-point-research/SKILL.md skills/pain-point-research/scripts/build_workbook.py \
   skills/pain-point-research/references/deliverables.md skills/pain-point-research/references/source-groups.md \
   skills/pain-point-research/references/workbook-schema.md skills/pain-point-research/references/connectors.md \
@@ -119,7 +119,8 @@ cat > "$TMP/s.json" <<'JSON'
  "top10":[{"rank":1,"pain_point":"p","category":"c","frequency":1,"intensity":2.0,"summary":"s"}],
  "categories":[{"category":"c","frequency":1,"frequency_share":"1%","intensity":2.0,"business_impact":"High","impact_reason":"r","opportunity_score":5}],
  "category_detail":[{"category":"c","behavioral_patterns":"b","emotional_triggers":"e","competitor_mentions":"m","opportunity_score":5,"opportunity_rationale":"r"}],
- "quotes":[{"id":"Q001","category":"c","quote":"q","url":"https://example.com","platform":"reddit","date":"unknown","competitor":"","emotion":"anger","intensity":3}],
+ "quotes":[{"id":"Q001","category":"c","quote":"q","url":"https://example.com","platform":"reddit","date":"unknown","competitor":"","emotion":"anger","intensity":3,"speaker_role":"target","verification":"verified"}],
+ "audience_fit":[{"metric":"verdict","value":"good","note":"n=1"}],
  "hidden_insights":[{"insight":"i","evidence":"e","quote_ids":"Q001"}],
  "competitor_gaps":[{"competitor":"c","pain_category":"p","how_they_fail":"h","evidence_quote_ids":"Q001"}],
  "language":{"vocabulary":[{"term":"t","type":"word","sources":1,"note":"n"}],"emotions":[{"emotion":"anger","share_pct":100}],"method_note":"m"},
@@ -135,7 +136,7 @@ try:
 except ImportError:
     sys.exit(0)
 wb=load_workbook(sys.argv[1])
-need={"Summary","Top 10","Categories","Category Detail","Quotes","Hidden Insights","Competitor Gaps","Action Matrix","Sources","Language"}
+need={"Summary","Audience Fit","Top 10","Categories","Category Detail","Quotes","Hidden Insights","Competitor Gaps","Action Matrix","Sources","Language"}
 assert need<=set(wb.sheetnames), set(wb.sheetnames)
 PY
 # CSV fallback path: run with openpyxl import blocked
@@ -147,6 +148,26 @@ rm -rf "$TMP"
 chk 15a "$TARGET/agents/source-researcher.md" "Do not spawn other agents" "no nested agents rule"
 chk 15b "$TARGET/agents/source-researcher.md" "Verbatim only" "verbatim rule"
 chk 15c "$TARGET/agents/source-researcher.md" "under 100 words" "output cap"
+
+# 15b. Verification and audience-fit stage
+chk 15d "$SK/SKILL.md" "Step 5b" "SKILL.md must have the verify-and-fit step before synthesis"
+chk 15e "$SK/SKILL.md" "quote-verifier" "SKILL.md must spawn quote-verifier"
+chk 15f "$SK/SKILL.md" "audience-fit-reviewer" "SKILL.md must spawn audience-fit-reviewer"
+chk 15g "$SK/SKILL.md" "Never silently continue on a .poor. verdict" "poor fit must stop for the user"
+chk 15h "$TARGET/agents/quote-verifier.md" "Never alter, repair, or paraphrase" "verifier must never edit quotes"
+chk 15i "$TARGET/agents/audience-fit-reviewer.md" "Read-only" "fit reviewer must be read-only"
+chk 15j "$SK/references/source-groups.md" "source_excerpt" "findings schema must carry source_excerpt"
+# verify_quotes.py behaves: one verbatim quote passes, a non-matching one and a missing excerpt fail
+VT=$(mktemp -d); mkdir -p "$VT/raw"
+cat > "$VT/raw/x.json" <<'JSON'
+{"group":"x","findings":[
+ {"quote":"It\u2019s  a giant waste","url":"https://e.com/a","source_excerpt":"foo it's a giant waste of money"},
+ {"quote":"nope","url":"https://e.com/b","source_excerpt":"something else"},
+ {"quote":"q","url":"https://e.com/c"}]}
+JSON
+OUT=$(python3 "$SK/scripts/verify_quotes.py" "$VT" 2>&1)
+if [ "$OUT" = "excerpt-checked 1, unverified 2" ]; then report 15k 1 ""; else report 15k 0 "verify_quotes.py gave: $OUT"; fi
+rm -rf "$VT"
 
 # 16. Built-artifact structure (only when scanning an unzipped build)
 if [ ! -d "$TARGET/.git" ] && [ -f "$TARGET/.claude-plugin/plugin.json" ]; then

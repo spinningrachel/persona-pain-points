@@ -16,6 +16,7 @@ Spawn one `source-researcher` agent per group. Derive the specifics (subreddits,
 - Search each competitor name with those phrases.
 - Prefer threads with replies and agreement (upvotes, "same here") as evidence of recurrence.
 - Record date and URL for every quote. Skip content older than 24 months unless it is the only evidence, and flag its age.
+- Save the surrounding passage in `source_excerpt` for every finding. A finding without it cannot be verified and is dropped.
 - Target 40+ quotes per group when available. Stop when new searches return no new pain themes.
 
 ## Findings file schema (`raw/<group>.json`)
@@ -37,6 +38,8 @@ Spawn one `source-researcher` agent per group. Derive the specifics (subreddits,
       "emotion": "frustration|anxiety|resignation|anger|confusion|hope|relief",
       "intensity": 1,
       "behavior": "workaround or action described, if any",
+      "source_excerpt": "the passage as fetched or scraped, up to 600 characters, that contains the quote verbatim",
+      "speaker_role": "role cue from the text, for example 'CISO', 'solo founder', 'consultant', 'vendor', or 'unknown'",
       "trigger": "what set off the emotion, if stated"
     }
   ]

@@ -47,7 +47,7 @@ Written to `pain-point-research/<audience-category>-<date>/` in your working fol
 
 | File | Contents |
 |---|---|
-| `pain-points.xlsx` | Sheets: Summary, Top 10, Categories, Category Detail, Quotes, Hidden Insights, Competitor Gaps, Language, Action Matrix, Sources |
+| `pain-points.xlsx` | Sheets: Summary, Audience Fit, Top 10, Categories, Category Detail, Quotes, Hidden Insights, Competitor Gaps, Language, Action Matrix, Sources |
 | `report.md` | Executive summary, hidden insights, competitor failures, language findings, limitations |
 | `synthesis.json` | The structured data behind both files |
 | `raw/` | Per-source findings (JSON) |
@@ -77,9 +77,10 @@ The plugin skips unavailable sources and documents each one in the report. It ne
 
 1. **Intake**, every run: audience, category, competitive intelligence, plus a specificity check that blocks vague input.
 2. **Source check**: lists which connectors and scrapers are reachable.
-3. **Parallel collection**: one `source-researcher` agent per source group (reddit, reviews, forums-qa, social, video-groups), each writing verbatim quotes with URLs.
-4. **Synthesis**: nine deliverables, scored by distinct-source frequency and 1-5 intensity.
-5. **Delivery**: workbook and report, with skipped sources and sample limits stated.
+3. **Parallel collection**: one `source-researcher` agent per source group (reddit, reviews, forums-qa, social, video-groups), each writing verbatim quotes with URLs and the source passage.
+4. **Verification and fit**, before synthesis: `quote-verifier` checks every quote against its saved passage and re-fetches a sample; `audience-fit-reviewer` tags who is speaking (target, adjacent, vendor or consultant, learner) and checks coverage of the regimes and competitors in your brief. A partial or poor fit stops the run and asks you whether to re-run with refined queries.
+5. **Synthesis**: nine deliverables, scored by distinct-source frequency and 1-5 intensity. Vendor, consultant and learner voices are reported separately from practitioner evidence.
+6. **Delivery**: workbook and report, with skipped sources, fit verdict and sample limits stated.
 
 Deliverables 6 and 8 of the source prompt are identical (Action Priority Matrix). The plugin delivers one matrix with the extra columns from item 8.
 
@@ -116,6 +117,14 @@ Then run the `qa-plugin` agent for the semantic pass before committing.
 ---
 
 ## Changelog
+
+### 2026-11-04 - 0.2.0: Quote verifier and audience-fit reviewer
+
+- New `quote-verifier` agent and `verify_quotes.py`: every finding carries the source passage; quotes not found verbatim in it are dropped, and a sample of URLs is re-fetched.
+- New `audience-fit-reviewer` agent: tags speaker roles, measures coverage of the brief's regimes and competitors, and gives a good, partial or poor verdict. A partial or poor verdict stops the run for the user's decision.
+- Workbook gains an `Audience Fit` sheet and `speaker_role` and `verification` columns on Quotes.
+- Added in response to the first test run, where 13 of 65 Reddit quotes were never string-checked and most voices were not the stated audience.
+- Not run inside Cowork from the build environment; the new stages are verified structurally and by the mechanical battery.
 
 ### 2026-11-04 - 0.1.0: First release
 

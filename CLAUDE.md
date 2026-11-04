@@ -32,7 +32,8 @@ Every release is prepared for both. Before shipping, confirm:
 - A vague category or audience blocks the run until the user answers follow-up questions. Never fill the gap with a guessed list of frameworks.
 - LinkedIn and Reddit: native connector, then scraper connectors, then public web, then give up and record it. Review sites (G2, Capterra, TrustRadius, Gartner) are never scraped around; the gap is reported.
 - Read-only. No posting, messaging, connecting, commenting, or logging in to private content.
-- Quotes are verbatim and tied to an exact URL, or they are dropped.
+- Quotes are verbatim, tied to an exact URL, and carry the source passage; unverifiable quotes are dropped.
+- Synthesis never starts before the verifier and the audience-fit reviewer have run, and a partial or poor fit goes to the user first.
 
 ## Never ship
 
@@ -44,8 +45,8 @@ Every release is prepared for both. Before shipping, confirm:
 
 ```
 .claude-plugin/   plugin.json, marketplace.json
-agents/           source-researcher (collection), qa-plugin (QA)
-skills/pain-point-research/   SKILL.md, references/, scripts/build_workbook.py
+agents/           source-researcher (collection), quote-verifier, audience-fit-reviewer, qa-plugin (QA)
+skills/pain-point-research/   SKILL.md, references/, scripts/build_workbook.py, scripts/verify_quotes.py
 scripts/          qa-mechanical.sh, build-plugin.sh, check-frontmatter.py
 .githooks/        pre-commit
 ```

@@ -11,7 +11,7 @@
       "name": "persona-pain-points",
       "source": "./",
       "description": "Pain-point research for marketers running multiple personas, businesses or products. Asks for the exact target audience, product category and competitive intelligence on every run, then delivers a spreadsheet plus a narrative report.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Rachel Cheyfitz",
         "email": "rachel@cheyfitz.me"

@@ -21,7 +21,7 @@
   ],
   "quotes": [
     {"id": "Q001", "category": "", "quote": "", "url": "", "platform": "", "date": "",
-     "competitor": "", "emotion": "", "intensity": 0}
+     "competitor": "", "emotion": "", "intensity": 0, "speaker_role": "target|adjacent|vendor_or_consultant|learner|unknown", "verification": "verified|excerpt-checked"}
   ],
   "hidden_insights": [{"insight": "", "evidence": "", "quote_ids": "Q001, Q014"}],
   "competitor_gaps": [
@@ -36,6 +36,9 @@
     {"category": "", "quadrant": "quick_win|strategic|monitor|ignore", "action": "",
      "next_step": "", "effort": "Low|Medium|High", "opportunity_score": 0, "evidence_quote_ids": ""}
   ],
+  "audience_fit": [
+    {"metric": "verdict|role share|regime coverage|competitor coverage|source mix|date spread|re-run suggestion", "value": "", "note": "sample size or detail"}
+  ],
   "sources": [
     {"type": "community|forum|review|post|thread|video", "name": "", "url": "", "platform": "", "cited_in": "Q001"}
   ]
@@ -44,6 +47,6 @@
 
 ## Sheets
 
-`Summary`, `Top 10`, `Categories`, `Category Detail`, `Quotes`, `Hidden Insights`, `Competitor Gaps`, `Language`, `Action Matrix`, `Sources`.
+`Summary`, `Audience Fit`, `Top 10`, `Categories`, `Category Detail`, `Quotes`, `Hidden Insights`, `Competitor Gaps`, `Action Matrix`, `Sources`, `Language`.
 
 `Quotes` and `Sources` are the sheets for filtering and pivoting after the run. Keep `id` values stable (`Q001`...) so other sheets can cite them.
