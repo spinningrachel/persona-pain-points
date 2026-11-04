@@ -1,0 +1,24 @@
+{
+  "name": "persona-pain-points",
+  "version": "0.1.0",
+  "description": "Pain-point research for marketers running multiple personas, businesses or products. Asks for the exact target audience, product category and competitive intelligence on every run, then mines Reddit, review sites, forums, social and video for ranked pain points, quotes, language patterns and competitor gaps. Delivers a spreadsheet plus a narrative report.",
+  "author": {
+    "name": "Rachel Cheyfitz",
+    "email": "rachel@cheyfitz.me"
+  },
+  "homepage": "https://github.com/spinningrachel/persona-pain-points",
+  "repository": "https://github.com/spinningrachel/persona-pain-points",
+  "license": "MIT",
+  "skills": [
+    "./skills/"
+  ],
+  "keywords": [
+    "marketing",
+    "persona",
+    "pain-points",
+    "voice-of-customer",
+    "competitive-intelligence",
+    "research",
+    "multi-agent"
+  ]
+}

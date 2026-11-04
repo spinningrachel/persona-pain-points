@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "persona-pain-points",
+  "owner": {
+    "name": "Rachel Cheyfitz",
+    "email": "rachel@cheyfitz.me"
+  },
+  "description": "Pain-point research plugin for marketers working with multiple personas, businesses or products.",
+  "plugins": [
+    {
+      "name": "persona-pain-points",
+      "source": "./",
+      "description": "Pain-point research for marketers running multiple personas, businesses or products. Asks for the exact target audience, product category and competitive intelligence on every run, then delivers a spreadsheet plus a narrative report.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Rachel Cheyfitz",
+        "email": "rachel@cheyfitz.me"
+      },
+      "homepage": "https://github.com/spinningrachel/persona-pain-points",
+      "repository": "https://github.com/spinningrachel/persona-pain-points",
+      "license": "MIT",
+      "category": "marketing",
+      "keywords": ["marketing", "persona", "pain-points", "voice-of-customer", "competitive-intelligence"]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# Research run output: contains client competitive intelligence and scraped quotes. Never commit.
+/pain-point-research/
+
+# Built artifacts are committed deliberately (persona-pain-points.plugin); stray zips are not
+*.zip
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Local config
+.claude/*.local.md
+.claude/settings.local.json
