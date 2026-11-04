@@ -1,11 +1,18 @@
 ---
 name: pain-point-research
 description: This skill should be used when the user asks to "research pain points", "run pain point research", "find what my audience complains about", "voice of customer research", "analyze online conversations for a persona", "mine Reddit and reviews for pain points", or starts research for a new persona, business or product. Runs the full intake-then-research workflow every time, with no saved state between runs.
-version: 0.2.0
+version: 0.2.1
+model: opus
 argument-hint: "[optional: audience | category]"
 ---
 
 # Pain-Point Research
+
+## Performance Notes
+
+- Take your time to do this thoroughly
+- Quality is more important than speed
+- Do not skip validation steps
 
 Research recurring pain points of one exact target audience around one product category, across public online conversations. Every run is independent: always run the intake below, even when the same audience was researched before. Never reuse earlier answers.
 
@@ -85,6 +92,10 @@ Read all `raw/*.json` files and the competitive intelligence. Produce the nine d
 2. Run `python3 ${CLAUDE_PLUGIN_ROOT}/skills/pain-point-research/scripts/build_workbook.py <run-folder>/synthesis.json <run-folder>/pain-points.xlsx`. If `openpyxl` is missing, try `pip3 install openpyxl`. If the install is blocked or fails (for example in a sandbox), the script writes one CSV per sheet, Summary and Language included; say so.
 3. Write `report.md` in the run folder: executive summary, top 10 ranked pain points, hidden insights, competitor failures, linguistic findings, limitations. Link to the workbook for the tables and quotes.
 4. Reply in chat with the verdict: top 3 pain points, the paths to both files, and any skipped sources. Keep it short.
+
+## Models
+
+Pinned in frontmatter, not chosen at run time: this skill (intake, synthesis, delivery) runs on Opus; `source-researcher` and `quote-verifier` on Sonnet; `audience-fit-reviewer` and `qa-plugin` on Opus. To change one, edit its `model:` line and rerun the QA battery.
 
 ## Rules
 

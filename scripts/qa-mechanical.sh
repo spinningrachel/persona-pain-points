@@ -169,6 +169,13 @@ OUT=$(python3 "$SK/scripts/verify_quotes.py" "$VT" 2>&1)
 if [ "$OUT" = "excerpt-checked 1, unverified 2" ]; then report 15k 1 ""; else report 15k 0 "verify_quotes.py gave: $OUT"; fi
 rm -rf "$VT"
 
+# 15c. Models are pinned in every skill and agent; the research skill carries the Performance Notes
+for f in skills/pain-point-research/SKILL.md agents/source-researcher.md agents/quote-verifier.md agents/audience-fit-reviewer.md agents/qa-plugin.md; do
+  if awk '/^---$/{n++; next} n==1' "$TARGET/$f" | grep -qE '^model: (opus|sonnet|fable|haiku|claude-[a-z0-9.-]+)$'; then report "15m:$f" 1 ""; else report "15m:$f" 0 "no pinned model in frontmatter"; fi
+done
+chk 15n "$SK/SKILL.md" "Quality is more important than speed" "Performance Notes missing"
+chk 15o "$SK/SKILL.md" "Do not skip validation steps" "Performance Notes missing"
+
 # 16. Built-artifact structure (only when scanning an unzipped build)
 if [ ! -d "$TARGET/.git" ] && [ -f "$TARGET/.claude-plugin/plugin.json" ]; then
   BAD=$(find "$TARGET" \( -name '.git' -o -name '.DS_Store' -o -name '__pycache__' -o -name '*.plugin' -o -name 'test-*' \) 2>/dev/null | head -3)

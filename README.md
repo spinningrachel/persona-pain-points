@@ -118,6 +118,13 @@ Then run the `qa-plugin` agent for the semantic pass before committing.
 
 ## Changelog
 
+### 2026-11-04 - 0.2.1: Pinned models and performance notes
+
+- Models are hard-coded in frontmatter: the research skill (intake, synthesis, delivery) on Opus; `source-researcher` and `quote-verifier` on Sonnet; `audience-fit-reviewer` and `qa-plugin` on Opus.
+- The research skill now carries Performance Notes: thoroughness over speed, no skipped validation steps.
+- QA fails the build if any skill or agent lacks a `model:` line.
+- Not tested inside Cowork from the build environment: whether Cowork honours `model:` in skill frontmatter, and a live Cowork run. Structure, paths and the CSV fallback are verified by the mechanical battery only.
+
 ### 2026-11-04 - 0.2.0: Quote verifier and audience-fit reviewer
 
 - New `quote-verifier` agent and `verify_quotes.py`: every finding carries the source passage; quotes not found verbatim in it are dropped, and a sample of URLs is re-fetched.

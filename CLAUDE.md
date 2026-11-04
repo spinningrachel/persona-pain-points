@@ -34,6 +34,7 @@ Every release is prepared for both. Before shipping, confirm:
 - Read-only. No posting, messaging, connecting, commenting, or logging in to private content.
 - Quotes are verbatim, tied to an exact URL, and carry the source passage; unverifiable quotes are dropped.
 - Synthesis never starts before the verifier and the audience-fit reviewer have run, and a partial or poor fit goes to the user first.
+- Every skill and agent pins `model:` in its frontmatter. QA fails the build if one is missing.
 
 ## Never ship
 
